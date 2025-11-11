@@ -3,15 +3,31 @@ security:
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+   
     providers:
-        users_in_memory: { memory: null }
+        in_memory:
+            memory:
+                users:
+                    admin:
+                        password: '$2y$13$vIM/sn5yympbB.d4ptFKPOWgpzZhbhFzU1XPr.HyNFdHmgXpqnjD6' 
+                        roles: ['ROLE_ADMIN', 'ROLE_USER']
+                    user:
+                        password: '$2y$13$N9K6PkXxFkHKmf8cPzehK.EviMD9uSyzOrON5DrKvM5xHHV0EmUWC' 
+                        roles: ['ROLE_USER']
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
         main:
+            pattern: ^/
+            provider: in_memory
             lazy: true
-            provider: users_in_memory
+            http_basic:
+                realm: 'Secured Area'
+            
+                
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -23,7 +39,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        # - {path : ^/product, roles: ROLE_USER }
         - {path : ^/dashboard, roles: ROLE_USER }
 
 when@test:
